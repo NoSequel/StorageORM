@@ -3,10 +3,6 @@
 # Storage Handler
 This is a library based off of my old storage handler within my [queue revamp](https://github.com/NoSequel/queue-recode). It's for easy storage handling for multiple platforms.
 
-# Todo / Development Progress
-* Serialization currently only works for **Jedis** module. Mongo module uses GSON to serialize/deserialize.
-* Perhaps add more features in the future.
-
 # Example Usages
 > more examples coming soon... i'm lazy
 
