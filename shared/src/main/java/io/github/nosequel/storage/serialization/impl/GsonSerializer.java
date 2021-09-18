@@ -1,7 +1,6 @@
 package io.github.nosequel.storage.serialization.impl;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import io.github.nosequel.storage.serialization.Serializer;
 import lombok.RequiredArgsConstructor;
 
@@ -9,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 public class GsonSerializer<T> implements Serializer<Object> {
 
     private final Class<T> clazz;
+    private final JsonParser parser = new JsonParser();
 
     public final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
@@ -32,7 +32,7 @@ public class GsonSerializer<T> implements Serializer<Object> {
      * @return the serialized object
      */
     @Override
-    public String serialize(Object object) {
-        return gson.toJson(object);
+    public JsonElement serialize(Object object) {
+        return this.parser.parse(gson.toJson(object));
     }
 }

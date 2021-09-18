@@ -16,9 +16,4 @@ public class MongoStorageHandler extends StorageHandler {
         this.authSettings = settings;
         this.database = settings.createObject();
     }
-
-    @Override
-    public <T> Serializer<T> getSerializer(Class<T> clazz) {
-        throw new UnsupportedOperationException("The mongo module currently only supports GSON serialization/deserialization.");
-    }
 }

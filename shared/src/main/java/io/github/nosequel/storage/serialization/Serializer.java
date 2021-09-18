@@ -1,5 +1,7 @@
 package io.github.nosequel.storage.serialization;
 
+import com.google.gson.JsonElement;
+
 public interface Serializer<T> {
 
     /**
@@ -16,6 +18,6 @@ public interface Serializer<T> {
      * @param object the object to serialize
      * @return the serialized object
      */
-    String serialize(T object);
+    JsonElement serialize(T object);
 
 }

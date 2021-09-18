@@ -47,7 +47,7 @@ public class RedisStorageProvider<T> extends StorageProvider<String, T> {
         ForkJoinPool.commonPool().execute(() -> {
             final Jedis jedis = this.storageHandler.getResource();
 
-            jedis.hset(this.key, key, this.serializer.serialize(value));
+            jedis.hset(this.key, key, this.serializer.serialize(value).toString());
             jedis.close();
         });
     }

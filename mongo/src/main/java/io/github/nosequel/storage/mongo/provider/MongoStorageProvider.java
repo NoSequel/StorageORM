@@ -1,6 +1,5 @@
 package io.github.nosequel.storage.mongo.provider;
 
-import com.google.gson.Gson;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
@@ -20,7 +19,7 @@ public class MongoStorageProvider<T> extends StorageProvider<String, T> {
     protected final MongoStorageHandler storageHandler;
 
     protected final Class<T> clazz;
-    protected final Gson gson;
+    protected final Serializer<T> serializer;
 
     private final MongoCollection<Document> collection;
 
@@ -31,19 +30,19 @@ public class MongoStorageProvider<T> extends StorageProvider<String, T> {
      * @param storageHandler the handler to get the mongo data from
      * @param clazz          the class of the generic {@link T} type.
      */
-    public MongoStorageProvider(String collection, MongoStorageHandler storageHandler, Class<T> clazz, Gson gson) {
+    public MongoStorageProvider(String collection, MongoStorageHandler storageHandler, Class<T> clazz, Serializer<T> serializer) {
         this.collection = storageHandler.getDatabase().getCollection(collection);
         this.storageHandler = storageHandler;
         this.clazz = clazz;
 
-        this.gson = gson;
+        this.serializer = storageHandler.getSerializer(clazz);
     }
 
     @Override
     public void setEntry(String key, T value) {
         ForkJoinPool.commonPool().execute(() -> this.collection.updateOne(
                 Filters.eq("_id", key),
-                new Document("$set", Document.parse(this.gson.toJson(value))),
+                new Document("$set", Document.parse(this.serializer.serialize(value).toString())),
                 new UpdateOptions().upsert(true)
         ));
     }
@@ -67,7 +66,7 @@ public class MongoStorageProvider<T> extends StorageProvider<String, T> {
                 return null;
             }
 
-            return this.gson.fromJson(document.toJson(), this.clazz);
+            return this.serializer.deserialize(document.toJson());
         });
     }
 
@@ -77,7 +76,7 @@ public class MongoStorageProvider<T> extends StorageProvider<String, T> {
             final Map<String, T> entries = new HashMap<>();
 
             for (Document document : this.collection.find()) {
-                entries.put(document.getString("_id"), this.gson.fromJson(document.toJson(), this.clazz));
+                entries.put(document.getString("_id"), this.serializer.deserialize(document.toJson()));
             }
 
             return entries;
