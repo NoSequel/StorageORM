@@ -1,5 +1,6 @@
 package io.github.nosequel.storage.mongo.provider;
 
+import com.google.gson.Gson;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
@@ -30,7 +31,23 @@ public class MongoStorageProvider<T> extends StorageProvider<String, T> {
      * @param storageHandler the handler to get the mongo data from
      * @param clazz          the class of the generic {@link T} type.
      */
-    public MongoStorageProvider(String collection, MongoStorageHandler storageHandler, Class<T> clazz, Serializer<T> serializer) {
+    public MongoStorageProvider(String collection, MongoStorageHandler storageHandler, Class<T> clazz) {
+        this.collection = storageHandler.getDatabase().getCollection(collection);
+        this.storageHandler = storageHandler;
+        this.clazz = clazz;
+
+        this.serializer = storageHandler.getSerializer(clazz);
+    }
+
+    /**
+     * Constructor to make a new {@link MongoStorageProvider} object.
+     *
+     * @param collection     the collection to read from/write to in the database
+     * @param storageHandler the handler to get the mongo data from
+     * @param clazz          the class of the generic {@link T} type.
+     */
+    @Deprecated
+    public MongoStorageProvider(String collection, MongoStorageHandler storageHandler, Class<T> clazz, Gson gson) {
         this.collection = storageHandler.getDatabase().getCollection(collection);
         this.storageHandler = storageHandler;
         this.clazz = clazz;
