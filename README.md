@@ -3,6 +3,8 @@
 # Storage Handler
 This is a library based off of my old storage handler within my [queue revamp](https://github.com/NoSequel/queue-recode). It's for easy storage handling for multiple platforms.
 
+Not a real ORM by the way, just can't change the repository name due to jitpack and other external repository users.
+
 # Todo
 * DynamicSqlStorageProvider
   * Currently not finished, and will definitely throw an error if you try to use it.
