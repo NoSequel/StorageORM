@@ -3,6 +3,11 @@
 # Storage Handler
 This is a library based off of my old storage handler within my [queue revamp](https://github.com/NoSequel/queue-recode). It's for easy storage handling for multiple platforms.
 
+# Todo
+* DynamicSqlStorageProvider
+  * Currently not finished, and will definitely throw an error if you try to use it.
+  * Find a way to dynamically fetch the entry (`DynamicSqlStorageProvider<T>#setEntry(String, T)` should work, but untested)
+
 # Example Usages
 > more examples coming soon... i'm lazy
 

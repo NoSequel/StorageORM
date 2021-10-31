@@ -71,7 +71,15 @@ public class MongoStorageProvider<T> extends StorageProvider<String, T> {
 
     @Override
     public void removeEntryValue(T value) {
-        throw new UnsupportedOperationException("That operation is not supported within the MongoStorageProvider.");
+        ForkJoinPool.commonPool().execute(() -> {
+            for (Document document : this.collection.find()) {
+                for (Map.Entry<String, Object> entry : document.entrySet()) {
+                    if (entry.getValue() == value) {
+                        this.collection.deleteOne(document);
+                    }
+                }
+            }
+        });
     }
 
     @Override
